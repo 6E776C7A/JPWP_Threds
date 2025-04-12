@@ -1,16 +1,48 @@
-# This is a sample Python script.
+import time
+from metoda_sekfencyjna import text_sequential_method
+from metoda_wielowątkowa import text_multithreaded_method
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+# Dane wejściowe
+text = open("data/Lorem_Ipsum_1GB.txt", "r").read()
+# 2 GB
+# text = text + text
+# 500 MB
+# text = text[0:len(text)//2]
+# 250 MB
+text = text[0:len(text)//4]
+# 100 MB
+# text = text[0:len(text)//10]
 
+# Słowo wyszukiwane
+keyword = "sit"
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+if not text:
+    raise ValueError("Tekst nie może być pusty")
+if not keyword:
+    raise ValueError("Słowo kluczowe nie może być puste")
 
+# Pomiar czasu wykonywania zliczania dla prostego sposobu sekfencyjnego
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+print(f"Wykonuje poszukiwania słowa {keyword} sposobem sekfencyjnym!")
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+time_start_sequential = time.perf_counter()
+
+result_sequential = text_sequential_method(text, keyword)
+
+time_end_sequential = time.perf_counter()
+
+print(
+    f'\nZnaleziono {keyword.lower()} w ilości: {result_sequential}. W czasie: {time_end_sequential - time_start_sequential} s')
+
+# Pomiar czasu wykonywania zliczania dla wielowątkowości
+
+print(f"\nWykonuje poszukiwania słowa {keyword} sposobem sekfencyjnym z wieloma wątkami!")
+
+time_start_multithreaded = time.perf_counter()
+
+result_multithreaded = text_multithreaded_method(text, keyword)
+
+time_end_multithreaded = time.perf_counter()
+
+print(
+    f'\nZnaleziono {keyword.lower()} w ilości: {result_multithreaded}. W czasie: {time_end_multithreaded - time_start_multithreaded} s')
