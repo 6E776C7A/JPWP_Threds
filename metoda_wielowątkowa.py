@@ -1,5 +1,4 @@
 import threading
-import time
 
 
 def count_keyword(fragment: str, keyword: str, result_list: list, index: int) -> None:
