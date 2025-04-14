@@ -44,7 +44,9 @@ def analyze_volume(audio_queue: queue.Queue, volume_queue: queue.Queue):
             volume_queue.put((volume,samples.astype(np.float32)))
 
         else:
-            time.sleep(0.001)
+            time.sleep(0.005)
+
+
 
 def volume_to_color(volume_percent):
     if volume_percent < 50:
@@ -57,31 +59,30 @@ def volume_to_color(volume_percent):
         g = int(255 * (1 - (volume_percent - 50) / 50))
     return f'#{r:02x}{g:02x}00'
 
-
-
-
-
 def gui_loop(volume_queue: queue.Queue):
     root = tk.Tk()
     root.title("Poziom Głośności")
     root.geometry("100x300")
 
-    canvas = tk.Canvas(root, width=60, height=250, bg="white")
+    canvas = tk.Canvas(root, width=100, height=250, bg="white")
     canvas.pack(pady=10)
     bar = canvas.create_rectangle(10, 250, 50, 250, fill='green', width=0)
-    signal_buffer = np.zeros(RATE//4)
+    signal_buffer = np.zeros(RATE//43)
 
 
     osc_canvas = tk.Canvas(root, width=300, height=100, bg='white')
     osc_canvas.pack(pady=10)
 
+    fft_canvas = tk.Canvas(root, width=300, height=100, bg='white')
+    fft_canvas.pack(pady=10)
 
     def update_gui():
         if not volume_queue.empty():
-            while not volume_queue.empty():
-                last = volume_queue.get()
+            try:
+                last = volume_queue.get_nowait()
+            except queue.Empty:
+                last = None
             volume, samples = last
-            signal_buffer[:-len(samples)] = signal_buffer[len(samples):]
             signal_buffer[-len(samples):] = samples
 
             if volume <= 5:
@@ -96,7 +97,7 @@ def gui_loop(volume_queue: queue.Queue):
 
             color = volume_to_color(volume_percent)
             bar_height = int((volume_percent/ 100)* 250)
-            canvas.coords(bar, 10, 250 - bar_height, 50, 250)
+            canvas.coords(bar, 10, 250 - bar_height, 95, 250)
             canvas.itemconfig(bar, fill=color)
             osc_canvas.delete('all')
             h = 100
@@ -113,68 +114,24 @@ def gui_loop(volume_queue: queue.Queue):
             for x in range(w-1):
                 y1 = int(mean - scaled[x])
                 y2 = int(mean - scaled[x+1])
-                osc_canvas.create_rectangle(x, y1, x+1, y2, fill=color)
-        root.after(2, update_gui)
+                osc_canvas.create_rectangle(x, y1, x+1, y2, fill='black')
+
+            fft_canvas.delete('all')
+            fft = np.abs(np.fft.rfft(samples * np.hanning(len(samples))))
+            fft = fft[:len(fft)//2]
+            bands = 50
+            band_bins = np.array_split(fft, bands)
+            max_fft = max(np.max(b) for b in band_bins)
+            for i, band in enumerate(band_bins):
+                amp = np.mean(band)
+                height = int((amp / max_fft) * 100) if max_fft > 0 else 0
+                x0 = i * (300 // bands)
+                x1 = x0 + (300 // bands - 2)
+                fft_canvas.create_rectangle(x0, 100 - height, x1, 100, fill='blue')
+        root.after(5, update_gui)
 
     update_gui()
     root.mainloop()
-
-# def update_bar_loop(volume_queue: queue.Queue):
-#     root = tk.Tk()
-#     root.title("Tylko przebieg sygnału")
-#     root.geometry("320x150")
-#
-#     signal_buffer = np.zeros(RATE)
-#
-#     # Oscyloskop
-#     osc_canvas = tk.Canvas(root, width=300, height=100, bg='white')
-#     osc_canvas.pack(pady=10)
-#
-#     def update_bar():
-#         nonlocal signal_buffer
-#         latest = None
-#         while not volume_queue.empty():
-#             try:
-#                 latest = volume_queue.get()
-#                 if latest is not None:
-#                     volume,samples = latest
-#                     # przesunięcie bufora
-#                     signal_buffer[:-len(samples)] = signal_buffer[len(samples):]
-#                     signal_buffer[-len(samples):] = samples
-#
-#                 # Wygaszenie przebiegu przy ciszy
-#
-#                 if volume <= 5:
-#                     signal_buffer[-len(samples):] = 0
-#
-#             except queue.Empty:
-#                 pass
-#
-#         # rysowanie wykresu
-#         osc_canvas.delete('all')
-#         w = 300
-#         h = 100
-#         mean = h // 2
-#         step = max(1, int(len(signal_buffer) / w))
-#         scaled = signal_buffer[::step]
-#         max_val = np.max(np.abs(scaled))
-#
-#         if max_val == 0:
-#             scaled = np.zeros_like(scaled)
-#         else:
-#             scaled = scaled / max_val * (h / 2 - 1)
-#
-#         for x in range(len(scaled) - 1):
-#             y1 = int(mean - scaled[x])
-#             y2 = int(mean - scaled[x + 1])
-#             osc_canvas.create_line(x, y1, x + 1, y2, fill='black')
-#
-#         root.after(2, update_bar)
-#
-#     update_bar()
-#     root.mainloop()
-
-
 
 if __name__ == '__main__':
     import threading
@@ -184,10 +141,8 @@ if __name__ == '__main__':
 
     t_record = threading.Thread(target=record_loop, args=(audio_q,), daemon=True)
     t_analyze = threading.Thread(target=analyze_volume, args=(audio_q, volume_q), daemon=True)
-    t_gui = threading.Thread(target=gui_loop, args=(volume_q,), daemon=True)
 
 
     t_record.start()
     t_analyze.start()
-    t_gui.start()
-    t_gui.join()
+    gui_loop(volume_q)
