@@ -14,12 +14,6 @@ def record_loop(audio_queue: queue.Queue):
 
 **Zadanie:** Zmień program tak, by funkcja `record_loop` działała w osobnym wątku (użyj `threading.Thread`). Uruchom ten wątek i sprawdź, czy wszystko działa poprawnie.
 
-**✎ Miejsce na kod:**
-
-```python
-# tutaj utwórz i uruchom wątek z record_loop
-```
-
 ---
 
 ### Zadanie 2: Analiza głośności w osobnym wątku
@@ -37,12 +31,6 @@ def analyze_volume(audio_queue: queue.Queue, volume_queue: queue.Queue):
 
 **Zadanie:** Uruchom tę funkcję w osobnym wątku. Upewnij się, że pobiera dane z `audio_queue` i umieszcza wyniki w `volume_queue`.
 
-**✎ Miejsce na kod:**
-
-```python
-# tutaj utwórz i uruchom wątek z analyze_volume
-```
-
 ---
 
 ### Zadanie 3: Rozdzielenie GUI na dwa wątki
@@ -56,7 +44,7 @@ Twój interfejs GUI rysuje zarówno pasek głośności, jak i oscyloskop w jedne
 
 Użyj osobnych `root.after()` dla każdej funkcji.
 
-**✎ Miejsce na kod:**
+**✎ kod:**
 
 ```python
 def update_volume_bar():
@@ -76,7 +64,7 @@ def update_oscilloscope():
 
 Podpowiedź: użyj `time.sleep(1)` oraz otwierania pliku w trybie `append` ("a").
 
-**✎ Miejsce na kod:**
+**✎ kod:**
 
 ```python
 def log_volume(volume_queue):
