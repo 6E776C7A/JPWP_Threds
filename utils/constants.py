@@ -1,0 +1,9 @@
+import pyaudio
+
+FORMAT = pyaudio.paInt16
+CHANNELS = 1
+RATE = 44100
+CHUNK = 1024
+DURATION = 1
+FRAMES_PER_BUFFER = int(RATE / CHUNK * DURATION)
+REF = 32768.0
