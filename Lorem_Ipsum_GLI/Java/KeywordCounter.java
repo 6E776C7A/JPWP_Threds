@@ -93,13 +93,13 @@ public class KeywordCounter {
         int resultSequential = countKeywordSequential(text.toString(), keyword);
         long endTime = System.nanoTime();
         System.out.println("Liczba wystąpień słowa '" + keyword + "' (metoda sekwencyjna): " + resultSequential);
-        System.out.println("Czas wykonania sekwencyjnego: " + (endTime - startTime) + " nanosekund");
+        System.out.println("Czas wykonania sekwencyjnego: " + (endTime - startTime) / 1_000_000_000.0 + " sekund");
 
         // Wielowątkowe zliczanie
         startTime = System.nanoTime();
         int resultMultithreaded = countKeywordMultithreaded(text.toString(), keyword, numThreads);
         endTime = System.nanoTime();
         System.out.println("Liczba wystąpień słowa '" + keyword + "' (metoda wielowątkowa): " + resultMultithreaded);
-        System.out.println("Czas wykonania wielowątkowego: " + (endTime - startTime) + " nanosekund");
+        System.out.println("Czas wykonania wielowątkowego: " + (endTime - startTime) / 1_000_000_000.0 + " sekund");
     }
 }

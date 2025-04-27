@@ -1,5 +1,5 @@
 import time
-from metoda_sekfencyjna import text_sequential_method
+from metoda_sekwencyjna import text_sequential_method
 from metoda_wielowątkowa import text_multithreaded_method
 
 # Dane wejściowe
@@ -21,9 +21,9 @@ if not text:
 if not keyword:
     raise ValueError("Słowo kluczowe nie może być puste")
 
-# Pomiar czasu wykonywania zliczania dla prostego sposobu sekfencyjnego
+# Pomiar czasu wykonywania zliczania dla prostego sposobu sekwencyjnego
 
-print(f"Wykonuje poszukiwania słowa {keyword} sposobem sekfencyjnym!")
+print(f"Wykonuje poszukiwania słowa {keyword} sposobem sekwencyjnym!")
 
 time_start_sequential = time.perf_counter()
 
@@ -36,7 +36,7 @@ print(
 
 # Pomiar czasu wykonywania zliczania dla wielowątkowości
 
-print(f"\nWykonuje poszukiwania słowa {keyword} sposobem sekfencyjnym z wieloma wątkami!")
+print(f"\nWykonuje poszukiwania słowa {keyword} sposobem sekwencyjnym z wieloma wątkami!")
 
 time_start_multithreaded = time.perf_counter()
 
