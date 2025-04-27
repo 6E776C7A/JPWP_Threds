@@ -1,7 +1,6 @@
 import numpy as np
 import queue
 import time
-from utils.constants import REF
 
 def analyze_volume(audio_queue: queue.Queue, volume_queue: queue.Queue):
     while True:

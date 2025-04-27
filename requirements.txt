@@ -1,0 +1,4 @@
+PyAudio==0.2.14
+numpy==2.2.4
+
+#pip install -r requirements.txt

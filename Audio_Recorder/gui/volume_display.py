@@ -1,25 +1,37 @@
 import tkinter as tk
 import numpy as np
-from gui.colors import volume_to_color
-from utils.constants import RATE, REF
+from Audio_Recorder.gui.colors import volume_to_color
+from Audio_Recorder.utils.constants import RATE, REF
 import queue
 
 def gui_loop(volume_queue: queue.Queue):
     root = tk.Tk()
-    root.title("Poziom Głośności")
-    root.geometry("100x300")
+    root.title("Nagrywany dźwięk")
 
-    canvas = tk.Canvas(root, width=100, height=250, bg="white")
-    canvas.pack(pady=10)
+    # Tutaj dokładnie ustawiamy ROZMIAR startowy
+    root.geometry("300x800")
+    root.minsize(300, 800)  # Minimalny rozmiar, nie da się zmniejszyć poniżej
+    root.maxsize(300, 800)
+    root.configure(bg='#222222')
+    root.rowconfigure([0, 1, 2, 3, 4, 5], weight=1)
+    root.columnconfigure(0, weight=1)
+    # --- CANVASY ---
+    label_volume = tk.Label(root, text="Poziom głośności", bg='#222222', fg='white', font=("Arial", 16))
+    label_volume.grid(row=0, column=0, pady=(10, 0))
+    canvas = tk.Canvas(root, bg="black", width=100, height=250)
+    canvas.grid(row=1, column=0, padx=10, pady=10)
     bar = canvas.create_rectangle(10, 250, 50, 250, fill='green', width=0)
 
-    signal_buffer = np.zeros(RATE // 43)
+    signal_buffer = np.zeros(1024)
+    label_osc = tk.Label(root, text="Oscyloskop", bg='#222222', fg='white', font=("Arial", 16))
+    label_osc.grid(row=2, column=0, pady=(0, 0))
+    osc_canvas = tk.Canvas(root, bg='black', height=100, width=300)
+    osc_canvas.grid(row=3, column=0, padx=0, pady=0)
 
-    osc_canvas = tk.Canvas(root, width=300, height=100, bg='white')
-    osc_canvas.pack(pady=10)
-
-    fft_canvas = tk.Canvas(root, width=300, height=100, bg='white')
-    fft_canvas.pack(pady=10)
+    label_fft = tk.Label(root, text="Transformata Fouriera (FFT)", bg='#222222', fg='white', font=("Arial", 16))
+    label_fft.grid(row=4, column=0, pady=(10, 0))
+    fft_canvas = tk.Canvas(root, bg='black', height=100)
+    fft_canvas.grid(row=5, column=0, sticky="nsew", padx=0, pady=0)
 
     def update_gui():
         if not volume_queue.empty():
@@ -50,7 +62,7 @@ def gui_loop(volume_queue: queue.Queue):
             for x in range(w - 1):
                 y1 = int(mean - scaled[x])
                 y2 = int(mean - scaled[x + 1])
-                osc_canvas.create_rectangle(x, y1, x + 1, y2, fill='black')
+                osc_canvas.create_line(x, y1, x + 1, y2, fill='white')
 
             # FFT
             fft_canvas.delete('all')

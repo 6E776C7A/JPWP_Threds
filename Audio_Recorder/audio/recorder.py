@@ -1,7 +1,7 @@
 import pyaudio
 import numpy as np
 import queue
-from utils.constants import FORMAT, CHANNELS, RATE, CHUNK
+from Audio_Recorder.utils.constants import FORMAT, CHANNELS, RATE, CHUNK
 
 def record_loop(audio_queue: queue.Queue):
     p = pyaudio.PyAudio()
