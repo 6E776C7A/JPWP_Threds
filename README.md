@@ -32,30 +32,36 @@ Projekt edukacyjny mający na celu przedstawienie kluczowych koncepcji związany
 
 ```
 main/
-├── prezentacja.pptx             # Slajdy, grafiki, mapa myśli
 │
-├── zadania.md                  # Quizy, pytania, zadania otwarte
+├── Zadania                 # Quizy, pytania, zadania otwarte
+│   ├── Quiz.md
+│   ├── Zadania.md
+│   └── Zadania.py          # Plik przygotowany do wykonywania zadań
 │
-├── lorem_ipsum/              # Przykładowe programy testowe
+├── Lorem_ipsum_GLI/              # Przykładowe programy testowe, problem GLI
 │   ├── python/
 │   │   ├── main.py
-│   │   ├── metoda_sekfencyjna.py
+│   │   ├── metoda_sekwencyjna.py
 │   │   └── metoda_wielowątkowa.py
 │   ├── java/
 │   │   └── KeywordCounter.java
 │   └── data/
 │       └──Lorem_Ipsum_1GB.txt
 │
-├── audio_recorder/           # Aplikacja z obsługą współbieżności
-│   ├── audo/
+├── Audio_Recorder/           # Aplikacja z obsługą współbieżności
+│   ├── audio/
 │   │   ├── analyzer.py
 │   │   └── recorder.py
 │   ├── gui/
 │   │   ├── colors.py
-│   │   └── colume_display.py
+│   │   └── volume_display.py
 │   ├── utils/
 │   │   └── constants.py
 │   └── main.py
+│
+├── Prezentacja_JPWP.pptx             # Slajdy, grafiki, mapa myśli
+│
+├── requirements.txt                  # Biblioteki potrzebne do projektu
 │
 └── README.md                 # Plik informacyjny o projekcie
 ```

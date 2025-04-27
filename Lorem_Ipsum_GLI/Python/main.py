@@ -3,7 +3,7 @@ from metoda_sekwencyjna import text_sequential_method
 from metoda_wielowątkowa import text_multithreaded_method
 
 # Dane wejściowe
-text = open("data/Lorem_Ipsum_1GB.txt", "r").read()
+text = open("Lorem_Ipsum_1GB.txt", "r").read()
 # 2 GB
 # text = text + text
 # 500 MB
