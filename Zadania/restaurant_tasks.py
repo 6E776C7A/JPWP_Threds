@@ -60,7 +60,7 @@ def cook_with_timeout(id_):
 #Funkcja startująca kucharzy z timeoutem
 
 def start_cooks_with_timeout():
-    pass  # <- tutaj uruchom kucharzy z timeoutem
+    pass  # <- Skopiuj tutaj Funkcje z poprzedniego polecenia i pomyśl co należy zmienić aby wywołać cook_with_timeout
 
 # 🏆 Zadanie 4: Statystyki kucharzy
 # - Skopiuj funkcjonalność kucharza z poprzedniego polecenia
@@ -77,7 +77,7 @@ def cook_with_stats(id_):
 #Funkcja startująca kucharzy ze statystykami
 
 def start_cooks_with_stats():
-    pass  # <- tutaj start kucharzy ze statystykami
+    pass  # <- tutaj zrób to samo co w poprzednim poleceniu
 
 #Funkcja pokazująca wyniki
 
