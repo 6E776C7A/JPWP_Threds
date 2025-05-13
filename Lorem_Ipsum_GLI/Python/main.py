@@ -1,6 +1,8 @@
+import asyncio
 import time
 from metoda_sekwencyjna import text_sequential_method
 from metoda_wielowątkowa import text_multithreaded_method
+from metoda_asyncio import  text_asyncio_method
 
 # Dane wejściowe
 text = open("Lorem_Ipsum_1GB.txt", "r").read()
@@ -46,3 +48,16 @@ time_end_multithreaded = time.perf_counter()
 
 print(
     f'\nZnaleziono {keyword.lower()} w ilości: {result_multithreaded}. W czasie: {time_end_multithreaded - time_start_multithreaded} s')
+
+# Pomiar czasu wykonywania zliczania dla asyncio
+
+print(f"\nWykonuje poszukiwania słowa {keyword} sposobem sekwencyjnym za pomocą asyncio!")
+
+time_start_asyncio = time.perf_counter()
+
+result_asyncio = asyncio.run(text_asyncio_method(text, keyword))
+
+time_end_asyncio = time.perf_counter()
+
+print(
+    f'\nZnaleziono {keyword.lower()} w ilości: {result_asyncio}. W czasie: {time_end_asyncio - time_start_asyncio} s')
